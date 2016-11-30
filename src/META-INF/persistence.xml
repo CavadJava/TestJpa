@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+             http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="jpa-1" transaction-type="RESOURCE_LOCAL">
+ <!--
+     Configure what ORM product to use as the JPA implementation
+     1. In fact the configuration is javax.persistence.spi.PersistenceProvider interface implementation class
+     2. If there is only one JPA implementation product in the JPA project, the node may not be configured.
+     -->
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <!-- Add a persistent class -->
+        <class>home.User</class>
+
+        <!--
+        Configure the L2 cache policy
+        ALL：All entity classes are cached
+        NONE：All of the entity classes are not cached.
+        ENABLE_SELECTIVE：The entity class that identifies the @Cacheable (true) annotation will be cached
+        DISABLE_SELECTIVE：Caches all entity classes except @Cacheable (false)
+        UNSPECIFIED：By default, JPA product defaults will be used
+        -->
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+
+        <properties>
+            <!-- Basic information for connecting to a database -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/databasetest"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="admin"/>
+
+            <!-- Configuration JPA implementation of the basic properties of the product.
+                 Configure the basic properties of hibernate -->
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+
+            <!-- Secondary cache related -->
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
